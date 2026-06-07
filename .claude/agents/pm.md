@@ -101,11 +101,13 @@ Spawn specialist agents for execution. Never execute code/design/test tasks dire
 
 | work type | agent/tool |
 |-----------|-----------|
-| implementation | default claude agent |
-| architecture | `architect` skill |
+| feature design + ADRs + contracts | `architect` agent |
+| implementation (via contracts) | `pi` CLI via `scripts/pi` |
 | testing | playwright agent or create test agent |
 | code quality | `code-simplifier` (global agent) |
 | UI/design | figma plugin |
+
+For any new feature story: invoke `architect` before implementation. Architect produces feature design + contracts. Pi executes contracts.
 
 When spawning: provide story ID, goal, tasks list, constraints.
 On return: verify all tasks checked → update board + GitHub → mark complete.
