@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+"""
+validate <artifact.yaml>
+Validates a YAML artifact against its schema (docs/schemas/<$id>.schema.yaml).
+Artifact must have a top-level '$id' field matching a schema file.
+Exit 0 = valid. Exit 1 = invalid or error.
+"""
+import sys
+import os
+
+try:
+    import yaml
+    import jsonschema
+except ImportError:
+    print("error: requires pyyaml and jsonschema — run: pip install pyyaml jsonschema", file=sys.stderr)
+    sys.exit(2)
+
+if len(sys.argv) != 2:
+    print("usage: validate <artifact.yaml>", file=sys.stderr)
+    sys.exit(2)
+
+artifact_path = sys.argv[1]
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(script_dir)
+schemas_dir = os.path.join(project_root, "docs", "schemas")
+
+with open(artifact_path) as f:
+    artifact = yaml.safe_load(f)
+
+schema_id = artifact.get("$id")
+if not schema_id:
+    print(f"error: artifact missing '$id' field: {artifact_path}", file=sys.stderr)
+    sys.exit(1)
+
+schema_path = os.path.join(schemas_dir, f"{schema_id}.schema.yaml")
+if not os.path.exists(schema_path):
+    print(f"error: no schema for '$id: {schema_id}' at {schema_path}", file=sys.stderr)
+    sys.exit(1)
+
+with open(schema_path) as f:
+    schema = yaml.safe_load(f)
+
+validator = jsonschema.Draft7Validator(schema)
+errors = sorted(validator.iter_errors(artifact), key=lambda e: list(e.path))
+
+if errors:
+    print(f"INVALID: {artifact_path}")
+    for e in errors:
+        path = ".".join(str(p) for p in e.path) or "(root)"
+        print(f"  {path}: {e.message}")
+    sys.exit(1)
+
+print(f"OK: {artifact_path}")

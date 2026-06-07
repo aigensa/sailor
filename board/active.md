@@ -1,3 +1,3 @@
 # Active
 
-_No stories in progress._
+_No active stories._

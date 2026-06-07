@@ -1,0 +1,46 @@
+$id: implementation-contract
+id: SAIL-001-T3-sqlite
+story: SAIL-001
+task_index: 3
+status: done
+created: "2026-06-07"
+produced_by: architect
+depends_on:
+  - SAIL-001-T1-project-init
+
+context: >
+  Wire expo-sqlite into the project. Create a db.ts singleton that opens the database.
+  No schema or migrations yet — that's SAIL-002. This just confirms SQLite is reachable
+  from app code.
+
+inputs:
+  storage_lib: expo-sqlite
+  db_file: sailor.db
+  db_module_path: app/src/db/db.ts
+
+deliverables:
+  - id: D1
+    description: Install expo-sqlite in app/
+    done: false
+  - id: D2
+    description: Create app/src/db/db.ts — opens SQLite database named "sailor.db" and exports a singleton `db` instance
+    done: false
+  - id: D3
+    description: Import db in app/App.tsx (just import, no usage needed) to confirm no compile errors
+    done: false
+
+constraints:
+  - Use expo-sqlite async API (openDatabaseAsync)
+  - "Export a single db promise or resolved instance — no multiple open calls"
+  - No table creation or migrations in this contract
+
+acceptance_criteria:
+  - app/src/db/db.ts exists and exports db
+  - "npx tsc --noEmit from app/ exits 0"
+  - No module-not-found errors for expo-sqlite
+
+evidence:
+  commands_run: []
+  files_created: []
+  notes: null
+  completed_at: null

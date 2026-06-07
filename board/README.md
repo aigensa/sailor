@@ -14,7 +14,7 @@ Owner: aigensa | Project: #5 | https://github.com/orgs/aigensa/projects/5
 
 ## Conventions
 - Story IDs: SAIL-NNN (3-digit, sequential, never reuse)
-- **Next ID: SAIL-001**
+- **Next ID: SAIL-003**
 - Lanes: backlog → active → done
 - Priority: p0=blocker p1=high p2=medium p3=low
 - Types: feature bug chore spike process

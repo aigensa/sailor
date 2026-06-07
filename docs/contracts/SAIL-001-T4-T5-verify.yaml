@@ -1,0 +1,51 @@
+$id: implementation-contract
+id: SAIL-001-T4-verify
+story: SAIL-001
+task_index: 4
+status: pending
+created: "2026-06-07"
+produced_by: architect
+depends_on:
+  - SAIL-001-T2-navigation
+  - SAIL-001-T3-sqlite
+
+context: >
+  Final verification: confirm the app boots on Android emulator showing the Home
+  screen, and that the SQLite database opens without runtime errors.
+  Combines story tasks 4 (wire storage) and 5 (verify on emulator) since both
+  are verification steps with no new code.
+
+inputs:
+  emulator_check_cmd: adb devices
+  start_cmd: npx expo run:android
+  expected_screen: Home
+
+deliverables:
+  - id: D1
+    description: Run `adb devices` — confirm at least one Android emulator/device is listed. If none, halt with BLOCKED.
+    done: false
+  - id: D2
+    description: Run `npx expo run:android` from app/ — app must build and install without errors
+    done: false
+  - id: D3
+    description: Confirm Home screen text is visible (screenshot or log output showing render)
+    done: false
+  - id: D4
+    description: Confirm no SQLite errors in Metro/logcat output during boot
+    done: false
+
+constraints:
+  - Do not proceed past D1 if no emulator is running — halt and report BLOCKED
+  - Do not mark done if app crashes on boot
+
+acceptance_criteria:
+  - adb devices lists at least one device
+  - npx expo run:android exits without build error
+  - Metro bundler output shows no red-screen errors
+  - logcat shows no SQLite-related exceptions
+
+evidence:
+  commands_run: []
+  files_created: []
+  notes: null
+  completed_at: null

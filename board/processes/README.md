@@ -2,5 +2,4 @@
 
 | slug | name | trigger |
 |------|------|---------|
-
-_No processes documented yet. Added when workflows recur ≥2x._
+| mobile-feature-dev | Mobile Feature Development | new mobile feature story |

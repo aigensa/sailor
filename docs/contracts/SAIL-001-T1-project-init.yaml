@@ -1,0 +1,52 @@
+$id: implementation-contract
+id: SAIL-001-T1-project-init
+story: SAIL-001
+task_index: 1
+status: done
+created: "2026-06-07"
+produced_by: architect
+depends_on: []
+
+context: >
+  Initialize the Sailor Expo project with TypeScript. No source code exists.
+  This creates the project skeleton at app/ inside the repo root.
+  Framework decision: Expo managed workflow (see ADR-001).
+
+inputs:
+  framework: expo
+  language: typescript
+  project_name: sailor
+  output_dir: app
+  expo_template: blank-typescript
+
+deliverables:
+  - id: D1
+    description: Run `npx create-expo-app@latest app --template blank-typescript` from project root
+    done: false
+  - id: D2
+    description: Pin Expo SDK version in app/package.json (do not use "latest")
+    done: false
+  - id: D3
+    description: Confirm app/App.tsx exists and compiles without errors (`npx tsc --noEmit` from app/)
+    done: false
+
+constraints:
+  - Output dir is app/ relative to project root
+  - "TypeScript strict mode (verify tsconfig.json has strict: true)"
+  - No additional packages beyond the template default
+
+acceptance_criteria:
+  - "app/package.json exists with a pinned expo version (e.g. expo: ~52.0.0)"
+  - "app/tsconfig.json has strict: true"
+  - "npx tsc --noEmit from app/ exits 0"
+
+evidence:
+  commands_run:
+    - npx create-expo-app@latest app --template blank-typescript
+    - cd app && npx tsc --noEmit
+  files_created:
+    - app/package.json
+    - app/tsconfig.json
+    - app/App.tsx
+  notes: Expo SDK pinned to ~56.0.9, strict mode confirmed
+  completed_at: "2026-06-07"

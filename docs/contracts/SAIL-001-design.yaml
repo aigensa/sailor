@@ -1,0 +1,53 @@
+$id: feature-design
+id: SAIL-001-design
+story: SAIL-001
+date: "2026-06-07"
+status: approved
+produced_by: architect
+
+intent:
+  summary: Bootstrap an Android app that can boot with navigation and local storage, ready for feature development.
+  user_value: Developer gets a runnable project with routing and SQLite wired — no setup friction when building features.
+  success_criteria:
+    - App boots on Android emulator without errors
+    - Home screen is reachable via navigation shell
+    - SQLite database can be opened and queried from app code
+
+scope:
+  in:
+    - Expo project initialization with TypeScript
+    - React Navigation bottom-tab or stack shell (Home screen placeholder only)
+    - expo-sqlite wired with a db.ts helper that opens the database
+    - Verified boot on Android emulator
+  out:
+    - Any real feature UI or business logic
+    - iOS support
+    - CI/CD setup
+
+risks:
+  - id: R1
+    description: Android emulator not installed or SDK not configured on dev machine
+    severity: high
+    mitigation: Contract T5 includes explicit emulator availability check before marking done. If emulator unavailable, pi halts and reports to architect.
+
+conclusions:
+  approach: >
+    Use Expo managed workflow with TypeScript. Initialize via `npx create-expo-app`.
+    Add React Navigation for routing. Add expo-sqlite for storage. Keep it minimal —
+    no feature logic, just the shell.
+  key_decisions:
+    - decision: Expo managed workflow over bare workflow
+      rationale: Reduces Android SDK config complexity for MVP. Can eject later if needed.
+    - decision: expo-sqlite over WatermelonDB or Realm
+      rationale: Zero config, ships with Expo, sufficient for checklist data at this scale.
+    - decision: React Navigation over Expo Router
+      rationale: More explicit control over navigation structure; fewer magic file conventions.
+  deferred:
+    - Navigation structure beyond Home placeholder (decided in SAIL-002)
+    - Database schema and migrations (decided in SAIL-002)
+
+implementation_notes:
+  - See ADR-001 for framework decision rationale
+  - Pin Expo SDK version in package.json to avoid unexpected upgrade breaks
+  - db.ts should export a single SQLiteDatabase instance (singleton pattern)
+  - Android emulator must be running before T5 contract executes

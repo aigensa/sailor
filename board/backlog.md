@@ -1,3 +1,3 @@
 # Backlog
 
-_No stories yet._
+[p1] SAIL-002 — Boat Check-in Feature (feature) #2

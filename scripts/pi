@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# pi <contract.yaml>
+# Validates contract against schema, then delegates to pi CLI for execution.
+set -euo pipefail
+
+CONTRACT="${1:?usage: pi <contract.yaml>}"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+PI_BIN="/Users/thesolutionarchitect/.nvm/versions/node/v24.13.0/bin/pi"
+
+# Load env vars from .env if present
+if [ -f "$PROJECT_ROOT/.env" ]; then
+  set -a
+  source "$PROJECT_ROOT/.env"
+  set +a
+fi
+
+if [ ! -f "$CONTRACT" ]; then
+  echo "error: contract not found: $CONTRACT" >&2
+  exit 1
+fi
+
+echo "validating $CONTRACT..."
+python3 "$SCRIPT_DIR/validate" "$CONTRACT" || exit 1
+
+echo "delegating to pi..."
+"$PI_BIN" --provider openrouter --model deepseek/deepseek-chat --print "$(cat <<'SYSTEM'
+You are an implementation executor for the Sailor project.
+Read AGENTS.md in the project root for project context and standards.
+Execute all deliverables in the contract below exactly as specified.
+Do not make design decisions — if anything is ambiguous, halt and output:
+  BLOCKED: <reason>
+After completing all deliverables:
+1. Update the contract file: set status to done, populate the evidence block
+2. Output a summary: contract id, N/N deliverables completed, files created
+SYSTEM
+)
+
+Contract:
+$(cat "$CONTRACT")"

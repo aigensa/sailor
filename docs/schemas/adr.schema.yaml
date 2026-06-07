@@ -1,0 +1,85 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+$id: adr
+title: Architecture Decision Record
+type: object
+required:
+  - $id
+  - id
+  - title
+  - date
+  - status
+  - context
+  - decision
+  - options_considered
+  - rationale
+  - consequences
+additionalProperties: false
+properties:
+  $id:
+    type: string
+    enum: [adr]
+  id:
+    type: string
+    pattern: "^ADR-[0-9]{3}$"
+  title:
+    type: string
+    minLength: 5
+  date:
+    type: string
+    format: date
+  status:
+    type: string
+    enum: [proposed, accepted, deprecated, superseded]
+  supersedes:
+    type: string
+    pattern: "^ADR-[0-9]{3}$"
+  context:
+    type: string
+    description: Why this decision was needed. Constraints, forces at play.
+    minLength: 20
+  decision:
+    type: string
+    description: The chosen option, stated clearly.
+    minLength: 10
+  options_considered:
+    type: array
+    minItems: 2
+    items:
+      type: object
+      required: [option, pros, cons]
+      additionalProperties: false
+      properties:
+        option:
+          type: string
+        pros:
+          type: array
+          minItems: 1
+          items:
+            type: string
+        cons:
+          type: array
+          minItems: 1
+          items:
+            type: string
+  rationale:
+    type: string
+    description: Why this option over the others.
+    minLength: 20
+  consequences:
+    type: object
+    required: [positive, negative]
+    additionalProperties: false
+    properties:
+      positive:
+        type: array
+        minItems: 1
+        items:
+          type: string
+      negative:
+        type: array
+        items:
+          type: string
+      risks:
+        type: array
+        items:
+          type: string

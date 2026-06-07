@@ -1,0 +1,56 @@
+$id: adr
+id: ADR-001
+title: Mobile Framework Selection — Expo/React Native vs Kotlin/Jetpack Compose
+date: "2026-06-07"
+status: accepted
+
+context: |
+  No source code exists. Android-only target for MVP. App needs local SQLite storage,
+  checklist UI, and a recommendations list. Must boot on Android emulator. Unblocks
+  all feature development (SAIL-002 depends on this). Decision is hard to reverse —
+  changing framework mid-project is a full rewrite.
+
+decision: Expo (React Native) with TypeScript
+
+options_considered:
+  - option: Expo / React Native (TypeScript)
+    pros:
+      - Faster MVP iteration — hot reload, large UI component ecosystem
+      - expo-sqlite v14+ provides stable SQLite with async API
+      - TypeScript gives type safety without native toolchain complexity
+      - Cross-platform path open if iOS is added later
+      - Managed workflow eliminates most Android-specific config
+    cons:
+      - JavaScript bridge adds latency (negligible for this app's complexity)
+      - Larger install footprint than native
+      - Expo managed workflow limits some deep Android APIs
+
+  - option: Kotlin / Jetpack Compose
+    pros:
+      - Native Android performance
+      - Room (SQLite) is first-class, well-documented
+      - Material Design 3 built-in
+      - No bridge overhead
+    cons:
+      - Steeper initial setup (Android Studio, Gradle, SDK management)
+      - Slower iteration for MVP — no hot reload equivalent
+      - Android-only forever (no iOS path)
+      - Compose learning curve if team is JS-oriented
+
+rationale: |
+  For an MVP checklist + recommendations app, the performance delta between Expo and
+  Kotlin/Compose is negligible. Expo's managed workflow and hot reload significantly
+  reduce time-to-first-feature. expo-sqlite covers the storage requirement. The
+  cross-platform optionality is a free benefit. Kotlin/Compose advantages are
+  relevant at scale, not MVP.
+
+consequences:
+  positive:
+    - Faster iteration on SAIL-001 through SAIL-002
+    - TypeScript catches data model errors at compile time
+    - expo-sqlite async API maps cleanly to checklist persistence
+  negative:
+    - JS bundle size larger than native equivalent
+    - Some advanced Android hardware APIs require bare workflow ejection
+  risks:
+    - Expo SDK major version upgrades can break native modules — pin SDK version in package.json
