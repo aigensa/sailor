@@ -1,0 +1,50 @@
+$id: implementation-contract
+id: SAIL-001-T2-navigation
+story: SAIL-001
+task_index: 2
+status: done
+created: "2026-06-07"
+produced_by: architect
+depends_on:
+  - SAIL-001-T1-project-init
+
+context: >
+  Add React Navigation to the project and set up a minimal navigation shell with
+  a single Home screen placeholder. No feature UI — just the routing infrastructure
+  that SAIL-002 will build on.
+
+inputs:
+  nav_library: "@react-navigation/native"
+  screen: Home
+  navigator_type: stack
+
+deliverables:
+  - id: D1
+    description: Install @react-navigation/native, @react-navigation/native-stack, react-native-screens, react-native-safe-area-context in app/
+    done: false
+  - id: D2
+    description: Create app/src/navigation/RootNavigator.tsx with a single Stack.Navigator containing HomeScreen
+    done: false
+  - id: D3
+    description: Create app/src/screens/HomeScreen.tsx — renders a Text "Home" placeholder, no logic
+    done: false
+  - id: D4
+    description: Wire RootNavigator into app/App.tsx (replace default content)
+    done: false
+
+constraints:
+  - No feature logic on HomeScreen — placeholder text only
+  - NavigationContainer must wrap RootNavigator in App.tsx
+  - No bottom tabs yet — stack only (SAIL-002 will define final nav structure)
+
+acceptance_criteria:
+  - app/src/navigation/RootNavigator.tsx exists and exports default RootNavigator
+  - app/src/screens/HomeScreen.tsx exists
+  - app/App.tsx imports and renders RootNavigator inside NavigationContainer
+  - "npx tsc --noEmit from app/ exits 0"
+
+evidence:
+  commands_run: []
+  files_created: []
+  notes: null
+  completed_at: null

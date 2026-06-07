@@ -1,0 +1,102 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+$id: implementation-contract
+title: Implementation Contract
+type: object
+required:
+  - $id
+  - id
+  - story
+  - task_index
+  - status
+  - created
+  - produced_by
+  - context
+  - deliverables
+  - acceptance_criteria
+additionalProperties: false
+properties:
+  $id:
+    type: string
+    enum: [implementation-contract]
+  id:
+    type: string
+    description: "Format: SAIL-NNN-TN-slug"
+    pattern: "^SAIL-[0-9]{3}-T[0-9]+-[a-z0-9-]+$"
+  story:
+    type: string
+    pattern: "^SAIL-[0-9]{3}$"
+  task_index:
+    type: integer
+    minimum: 1
+    description: Which task in the story task list this contract implements.
+  status:
+    type: string
+    enum: [pending, in-progress, done, failed]
+  created:
+    type: string
+    format: date
+  produced_by:
+    type: string
+    enum: [architect]
+  depends_on:
+    type: array
+    description: Contract IDs that must be done before this one.
+    items:
+      type: string
+      pattern: "^SAIL-[0-9]{3}-T[0-9]+-[a-z0-9-]+$"
+
+  context:
+    type: string
+    description: What to build and why. Background for pi.
+    minLength: 20
+
+  inputs:
+    type: object
+    description: Key values and decisions this contract depends on.
+    additionalProperties: true
+
+  deliverables:
+    type: array
+    minItems: 1
+    items:
+      type: object
+      required: [id, description, done]
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          pattern: "^D[0-9]+$"
+        description:
+          type: string
+        done:
+          type: boolean
+
+  constraints:
+    type: array
+    items:
+      type: string
+
+  acceptance_criteria:
+    type: array
+    minItems: 1
+    items:
+      type: string
+
+  evidence:
+    type: object
+    additionalProperties: false
+    properties:
+      commands_run:
+        type: array
+        items:
+          type: string
+      files_created:
+        type: array
+        items:
+          type: string
+      notes:
+        type: [string, "null"]
+      completed_at:
+        type: [string, "null"]
+      error:
+        type: [string, "null"]
