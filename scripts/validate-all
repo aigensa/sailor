@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+VALIDATE="$SCRIPT_DIR/validate"
+failed=0; total=0
+
+for f in "$PROJECT_ROOT/docs/contracts/"*.yaml; do
+  [ -f "$f" ] || continue
+  total=$((total + 1))
+  if python3 "$VALIDATE" "$f"; then :; else failed=$((failed + 1)); fi
+done
+
+echo "contracts: $((total - failed))/$total passed"
+[ "$failed" -eq 0 ] || { echo "FAILED: $failed invalid" >&2; exit 1; }
