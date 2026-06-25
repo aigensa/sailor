@@ -1,6 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
 import RootNavigator from './src/navigation/RootNavigator';
-import db from './src/db/db';
 
 export default function App() {
   return (
