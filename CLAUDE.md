@@ -11,3 +11,6 @@ Default agent: pm. All requests route through pm unless a specialist agent is ex
 Board: board/ (backlog.md, active.md, done.md, stories/, processes/)
 GitHub Project: #5 (owner: aigensa)
 Story IDs: SAIL-NNN
+
+## Quality Checks
+Run `just check` before committing (typecheck, lint, fmt-check, contracts) — matches CI.

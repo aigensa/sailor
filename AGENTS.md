@@ -8,14 +8,14 @@ Mobile app for sailors. Android-only. MVP scope.
 
 ## Tech Stack
 See `docs/adr/` for decisions. Current:
-- Framework: TBD (ADR-001 pending)
+- Framework: Expo (React Native) — see ADR-001
 - Language: TypeScript
 - Storage: Local SQLite
 - Platform: Android only
 
 ## Project Structure
 ```
-app/                  mobile app source (created by SAIL-001)
+app/                  mobile app source (Expo/React Native)
 board/                project board (backlog, active, done, stories)
 docs/
   adr/                architecture decision records (YAML)
