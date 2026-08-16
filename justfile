@@ -19,6 +19,10 @@ fmt:
 fmt-check:
     cd app && npm run format:check
 
+# Note: `pip install` may fail with PEP 668 "externally-managed-environment"
+# on Homebrew Python locally. CI's actions/setup-python has no such
+# restriction. If it fails locally, run `bash scripts/validate-all` directly
+# once deps are available (e.g. via a venv).
 [group('quality')]
 contracts:
     pip install -r scripts/requirements.txt
