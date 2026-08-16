@@ -1,0 +1,24 @@
+name: 'Setup just'
+description: 'Idempotently ensure the just task runner is installed and on PATH'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Ensure just is installed
+      shell: bash
+      run: |
+        set -euo pipefail
+        if ! command -v just &> /dev/null && [ ! -x "$HOME/.local/bin/just" ]; then
+          case "$(uname -s)" in
+            Darwin) brew install just ;;
+            *)
+              mkdir -p "$HOME/.local/bin"
+              curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to "$HOME/.local/bin" --force
+              ;;
+          esac
+        fi
+        for dir in "/opt/homebrew/bin" "/usr/local/bin" "$HOME/.local/bin"; do
+          [ -d "$dir" ] && echo "$dir" >> "$GITHUB_PATH"
+        done
+        export PATH="/opt/homebrew/bin:/usr/local/bin:$HOME/.local/bin:$PATH"
+        just --version

@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+APP_DIR="$(cd "$SCRIPT_DIR/../app" && pwd)"
+failed=0
+
+run() {
+  local label="$1"; shift
+  echo "==> $label"
+  if "$@"; then echo "    PASS"; else echo "    FAIL" >&2; failed=$((failed + 1)); fi
+  echo ""
+}
+
+run "typecheck"  npm --prefix "$APP_DIR" run typecheck
+run "lint"       npm --prefix "$APP_DIR" run lint
+run "contracts"  "$SCRIPT_DIR/validate-all"
+
+[ "$failed" -eq 0 ] && echo "All checks passed." || { echo "FAILED: $failed check(s)" >&2; exit 1; }
