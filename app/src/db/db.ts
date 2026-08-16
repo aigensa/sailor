@@ -1,5 +1,5 @@
-import { openDatabaseAsync } from 'expo-sqlite';
+import { openDatabaseAsync } from "expo-sqlite";
 
-const db = openDatabaseAsync('sailor.db');
+const db = openDatabaseAsync("sailor.db");
 
 export default db;
